@@ -13,6 +13,7 @@ class Users(models.Model):  # 用户信息
     mail = models.CharField(u"邮箱", max_length=100)
     weChat_id = models.CharField(u"微信ID", max_length=100)
     reg_time = models.DateTimeField(u"注册时间", max_length=100)
+    credit = models.IntegerField(u"信誉积分", default=100)  # 信誉积分,默认100,取消拼车、退出拼车、预定不取会扣除
 
 
 # 以下为预定早饭相关功能所需表
@@ -52,3 +53,46 @@ class OrderFood(models.Model):  # 订单、菜品、商家之间的关系表
     user_id = models.CharField(u"预定者id", max_length=100)
     num = models.IntegerField(u"商品数量")
     price = models.FloatField(u"商品单价")
+
+
+# 以下是拼车相关功能所需表
+class Plan(models.Model):  # 拼车计划
+    from_site = models.CharField(u"起点", max_length=100)
+    to_site = models.CharField(u"终点", max_length=100)
+    category = models.CharField(u"标签/分类", max_length=100)
+    trip_mode = models.CharField(u"出行方式", max_length=100)
+    pub_time = models.DateTimeField(u"发布日期", auto_now=True, null=True)  # 该条计划发布时间
+    deadline = models.DateTimeField(u"截止时间", null=True)  # 在此时间前加入
+    trip_time = models.DateTimeField(u"计划出行时间")  # 计划出行时间
+    pub_username = models.CharField(u"发布者昵称", max_length=100)
+    pub_name = models.CharField(u"发布者姓名", max_length=100)
+    pub_no = models.CharField(u"发布者学号/工号", max_length=100)
+    pub_wechat = models.CharField(u"发布者微信ID", max_length=100)
+    pub_gender = models.CharField(u"发布者性别", max_length=100)
+    note = models.CharField(u"备注", null=True)
+    num_need = models.IntegerField(u"需要人数")  # 除发起者外的需要人数
+    num_have = models.IntegerField(u"已有人数", default=0)  # 默认已有0人
+    ended = models.BooleanField(u"是否已结束", default=False)  # 默认未结束
+    auth_gender = models.IntegerField(u"允许加入者性别")  # 0-均可加入,1-仅男性,2-仅女性
+
+    def __unicode__(self):
+        return self.id
+    """
+    class Meta:  # 按时间下降排序
+        ordering = ['-pub_time']
+        verbose_name = "出行计划"
+        verbose_name_plural = "出行计划"
+    """
+
+
+class JoinPlan(models.Model):  # 参与者与计划的关系表
+    join_no = models.CharField(u"参加者的学号/工号", max_length=100)
+    join_username = models.CharField(u"参加者的昵称", max_length=100, null=True)
+    join_name = models.CharField(u"参加者的姓名", max_length=100, null=True)
+    join_wechat = models.CharField(u"参加者的微信ID", max_length=100, null=True)
+    join_gender = models.CharField(u"参加者的性别", max_length=100, null=True)
+    join_plan_id = models.CharField()  # 所参加事件在Plan表中的序号
+    # 为了保证此序号正确，Plan表中的数据不删除，可以改变ended的值来表示
+    join_time = models.DateTimeField(auto_now=True, null=True)  # 加入时的时间
+    have_ended = models.BooleanField(default=False)  # 计划结束 默认False, 未退出
+    canceled = models.BooleanField(default=False)  # 是否已退出 默认False, 未退出
