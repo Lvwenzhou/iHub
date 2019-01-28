@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'iHub_site',
 ]
 
 MIDDLEWARE = [
@@ -76,8 +77,12 @@ WSGI_APPLICATION = 'iHub.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'ihub_db',
+        'USER': 'root',
+        'PASSWORD': '!Hub2019',
+        'HOST': 'rm-bp1b4qfjs27c5ld11wo.mysql.rds.aliyuncs.com',
+        'PORT': '3306',
     }
 }
 

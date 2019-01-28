@@ -4,12 +4,12 @@ from django.db import models
 # Create your models here.
 class Users(models.Model):  # 用户信息
     username = models.CharField(u"用户名", max_length=100)
-    password = models.CharField(u"密码", max_length=100)
+    password = models.CharField(u"密码", max_length=100, null=True)  # 目前在Django的账户系统中存储密码,这里没必要存,可以为空
     no = models.CharField(u"学号/工号", max_length=100)
     name = models.CharField(u"姓名", max_length=100)
     gender = models.CharField(u"性别", max_length=100)
     major = models.CharField(u"专业", max_length=100)
-    avatar = models.ImageField(upload_to="static/avatar")
+    avatar = models.ImageField(upload_to="static/avatar", null=True)  # 头像这里还不会写，先让这里空着，基本功能做完再写
     mail = models.CharField(u"邮箱", max_length=100)
     weChat_id = models.CharField(u"微信ID", max_length=100)
     reg_time = models.DateTimeField(u"注册时间", max_length=100)
@@ -47,10 +47,10 @@ class Shop(models.Model):  # 商家
 
 class OrderFood(models.Model):  # 订单、菜品、商家之间的关系表
     # 这些id指的是表中的那列叫id的序号
-    order_id = models.CharField(u"订单id", max_length=100)
-    shop_id = models.CharField(u"商家id", max_length=100)
-    goods_id = models.CharField(u"商品id", max_length=100)
-    user_id = models.CharField(u"预定者id", max_length=100)
+    order_id = models.IntegerField(u"订单id")
+    shop_id = models.IntegerField(u"商家id")
+    goods_id = models.IntegerField(u"商品id")
+    user_id = models.IntegerField(u"预定者id")
     num = models.IntegerField(u"商品数量")
     price = models.FloatField(u"商品单价")
 
@@ -61,7 +61,7 @@ class Plan(models.Model):  # 拼车计划
     to_site = models.CharField(u"终点", max_length=100)
     category = models.CharField(u"标签/分类", max_length=100)
     trip_mode = models.CharField(u"出行方式", max_length=100)
-    pub_time = models.DateTimeField(u"发布日期", auto_now=True, null=True)  # 该条计划发布时间
+    pub_time = models.DateTimeField(u"发布日期", auto_now=True)  # 该条计划发布时间
     deadline = models.DateTimeField(u"截止时间", null=True)  # 在此时间前加入
     trip_time = models.DateTimeField(u"计划出行时间")  # 计划出行时间
     pub_username = models.CharField(u"发布者昵称", max_length=100)
@@ -69,7 +69,7 @@ class Plan(models.Model):  # 拼车计划
     pub_no = models.CharField(u"发布者学号/工号", max_length=100)
     pub_wechat = models.CharField(u"发布者微信ID", max_length=100)
     pub_gender = models.CharField(u"发布者性别", max_length=100)
-    note = models.CharField(u"备注", null=True)
+    note = models.CharField(u"备注", max_length=255, null=True)
     num_need = models.IntegerField(u"需要人数")  # 除发起者外的需要人数
     num_have = models.IntegerField(u"已有人数", default=0)  # 默认已有0人
     ended = models.BooleanField(u"是否已结束", default=False)  # 默认未结束
@@ -87,12 +87,12 @@ class Plan(models.Model):  # 拼车计划
 
 class JoinPlan(models.Model):  # 参与者与计划的关系表
     join_no = models.CharField(u"参加者的学号/工号", max_length=100)
-    join_username = models.CharField(u"参加者的昵称", max_length=100, null=True)
-    join_name = models.CharField(u"参加者的姓名", max_length=100, null=True)
-    join_wechat = models.CharField(u"参加者的微信ID", max_length=100, null=True)
-    join_gender = models.CharField(u"参加者的性别", max_length=100, null=True)
-    join_plan_id = models.CharField()  # 所参加事件在Plan表中的序号
+    join_username = models.CharField(u"参加者的昵称", max_length=100)
+    join_name = models.CharField(u"参加者的姓名", max_length=100)
+    join_wechat = models.CharField(u"参加者的微信ID", max_length=100)
+    join_gender = models.CharField(u"参加者的性别", max_length=100)
+    join_plan_id = models.IntegerField(u"所参加事件在Plan表中的序号")
     # 为了保证此序号正确，Plan表中的数据不删除，可以改变ended的值来表示
-    join_time = models.DateTimeField(auto_now=True, null=True)  # 加入时的时间
+    join_time = models.DateTimeField(auto_now=True)  # 加入时的时间
     have_ended = models.BooleanField(default=False)  # 计划结束 默认False, 未退出
     canceled = models.BooleanField(default=False)  # 是否已退出 默认False, 未退出
