@@ -8,7 +8,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 
 # Create your views here.
-from iHub_site.models import Users
+from iHub_site.models import Users, Plan, JoinPlan
 
 
 def login(request):  # 登录
@@ -87,3 +87,122 @@ def logout(request):  # 登出
         response.delete_cookie('ticket')
         return response
 
+
+# 以下是拼车相关功能的函数:
+
+# 发起拼车
+def start_plan(request):
+    if request.method == 'GET':
+        # 登录了才能发帖
+        if not request.user.is_authenticated:
+            return render(request, 'my.html', {'not_log_in': True})  # 未登录,跳转至个人主页去登录
+        else:
+            return render(request, 'start_plan.html')  # 已登录，跳转至发起拼车页面
+    if request.method == 'POST':
+        from_site = request.POST.get('from_site_input')  # 输入起始地点
+        to_site = request.POST.get('to_site_input')  # 输入到达地点
+        category = request.POST.get('category_input')  # 选择标签/分类
+        trip_mode = request.POST.get('trip_mode_select')  # 选择出行方式
+        pub_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # 自动生成的发布时间
+        deadline = request.POST.get('deadline_input')  # 输入截止时间
+        trip_time = request.POST.get('trip_time_input')  # 输入计划出行时间
+        note = request.POST.get('note_input')  # 输入备注
+        num_need = request.POST.get('num_need_input')  # 输入除发起者外需要人数
+        auth_gender = request.POST.get('auth_gender_input')  # 选择允许加入者性别
+
+        user_no_now = request.user.username
+        user_now = Users.objects.get(no=user_no_now)
+        pub_username = user_now.username
+        pub_name = user_now.name
+        pub_no = user_now.no
+        pub_wechat = user_now.weChat_id
+        pub_gender = user_now.gender
+
+        if len(from_site) == 0 or len(to_site) == 0 or len(trip_mode) == 0 or len(trip_time) == 0 or len(num_need) == 0:
+            return render(request, 'start_plan.html', {'no_input': True})  # 未输入完整
+        else:
+            Plan.objects.create(from_site=from_site, to_site=to_site, category=category, trip_mode=trip_mode,
+                                pub_time=pub_time, deadline=deadline, trip_time=trip_time, note=note, num_need=num_need,
+                                auth_gender=auth_gender, pub_username=pub_username, pub_name=pub_name, pub_no=pub_no,
+                                pub_wechat=pub_wechat, pub_gender=pub_gender)
+            return HttpResponseRedirect('/plans/')  # 发起成功，返回查看拼车信息页面
+
+
+# 加入拼车
+def take_part(request):
+    if request.method == 'GET':
+        if not request.user.is_authenticated:  # 若未登录
+            plan_list = Plan.objects.filter(Q(ended=False) & Q(full=False))
+            return render(request, 'plans.html', {'not_log_in': True, 'plan_list': plan_list})  # 返回查看拼车信息页面
+        else:
+            join_user_now = request.user.username
+            join_user = Users.objects.get(no=join_user_now)
+
+            join_plan_id = request.GET.get('plan_id')  # 返回参与事件在表Plan中的id
+            join_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+            join_no = join_user.no
+            join_username = join_user.username
+            join_name = join_user.name
+            join_wechat = join_user.weChat_id
+            join_gender = join_user.gender
+
+            # 不可参加自己发起的事件
+            plan_to_join = Plan.objects.get(id=join_plan_id)
+            if plan_to_join.pub_no == join_user.no:
+                plan_list = Plan.objects.filter(Q(ended=False) & Q(full=False))
+                return render(request, 'plans.html', {'join_self': True, 'plan_list': plan_list})  # 返回查看拼车信息页面
+
+            # 同一事件不可参加多次
+            tmp = JoinPlan.objects.filter(Q(join_plan_id=join_plan_id) & Q(join_no=join_no))
+            if len(tmp) != 0:
+                plan_list = Plan.objects.filter(Q(ended=False) & Q(full=False))
+                return render(request, 'plans.html', {'have_joined': True, 'plan_list': plan_list})  # 返回查看拼车信息页面
+
+            JoinPlan.objects.create(join_no=join_no, join_username=join_username, join_name=join_name,
+                                    join_wechat=join_wechat, join_gender=join_gender, join_plan_id=join_plan_id,
+                                    join_time=join_time)
+
+            plan_to_join.num_have = plan_to_join.num_have + 1  # 该事件参与人数加一
+            plan_to_join.save()
+            if plan_to_join.num_have == plan_to_join.num_need:  # 若该事件参与人数等于所需人数,full变为True,人数已满
+                plan_to_join.full = True
+                plan_to_join.save()
+
+            return redirect('/my/')  # 参与成功，返回个人信息页面
+
+
+# 取消已发起的拼车事件
+def cancel_plan(request):
+    if request.method == 'GET':
+        plan_id = request.GET.get('plan_id')  # 返回这一事件在Plan表中的id
+        plan_to_cancel = Plan.objects.get(id=plan_id)
+        plan_to_cancel.ended = True
+        plan_to_cancel.canceled = True
+        plan_to_cancel.save()
+        related = JoinPlan.objects.filter(join_plan_id=plan_id)
+        for item in related:  # 此处不知道对不对,PyCharm没给提示,还需测试
+            item.canceled = True
+            item.ended = True
+            item.save()
+        return redirect('/my/')
+
+
+# 退出已加入的拼车事件
+def quit_plan(request):
+    if request.method == 'GET':
+        plan_id = request.GET.get('plan_id')  # 返回这一事件在Plan表中的id
+        user_no = request.user.username
+
+        plan_to_quit = Plan.objects.get(id=plan_id)
+        plan_to_quit.num_have = plan_to_quit.num_have - 1
+        plan_to_quit.save()
+        if plan_to_quit.full:
+            plan_to_quit.full = False
+        plan_to_quit.save()
+
+        related = JoinPlan.objects.get(Q(join_plan_id=plan_id) & Q(join_no=user_no))
+        related.quitted = True
+        related.save()
+
+        return redirect('/my/')
