@@ -4,11 +4,7 @@
     <bookmark url="file://$PROJECT_DIR$/iHub_site/models.py" line="69" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7fb7758e-253a-4947-af58-27728e77e861" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iHub_site/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/iHub_site/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iHub_site/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/iHub_site/views.py" afterDir="false" />
-    </list>
+    <list default="true" id="7fb7758e-253a-4947-af58-27728e77e861" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,7 +38,7 @@
         <entry file="file://$PROJECT_DIR$/iHub_site/models.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="615">
-              <caret line="96" column="24" lean-forward="true" selection-start-line="96" selection-start-column="24" selection-end-line="96" selection-end-column="24" />
+              <caret line="96" column="24" selection-start-line="96" selection-start-column="24" selection-end-line="96" selection-end-column="24" />
             </state>
           </provider>
         </entry>
@@ -70,7 +66,7 @@
         <entry file="file://$PROJECT_DIR$/iHub_site/views.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="475">
-              <caret line="206" lean-forward="true" selection-start-line="206" selection-end-line="206" />
+              <caret line="206" selection-start-line="206" selection-end-line="206" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
@@ -131,7 +127,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-10" />
     <option name="y" value="-10" />
     <option name="width" value="1940" />
@@ -223,7 +219,7 @@
       <updated>1548555781608</updated>
       <workItem from="1548555912174" duration="8505000" />
       <workItem from="1548665989474" duration="16500000" />
-      <workItem from="1548751529373" duration="19230000" />
+      <workItem from="1548751529373" duration="20348000" />
     </task>
     <task id="LOCAL-00001" summary="创建工程">
       <created>1548559267501</created>
@@ -236,13 +232,12 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="44235000" />
+    <option name="totallyTimeSpent" value="45353000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-6" y="-6" width="1549" height="837" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16008037" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16008037" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -337,14 +332,14 @@
     <entry file="file://$PROJECT_DIR$/iHub_site/models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="615">
-          <caret line="96" column="24" lean-forward="true" selection-start-line="96" selection-start-column="24" selection-end-line="96" selection-end-column="24" />
+          <caret line="96" column="24" selection-start-line="96" selection-start-column="24" selection-end-line="96" selection-end-column="24" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/iHub_site/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="475">
-          <caret line="206" lean-forward="true" selection-start-line="206" selection-end-line="206" />
+          <caret line="206" selection-start-line="206" selection-end-line="206" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
           </folding>
