@@ -8,7 +8,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 
 # Create your views here.
-from iHub_site.models import Users, Plan, JoinPlan
+from iHub_site.models import Users, Plan, JoinPlan,Order,OrderFood,Shop,Menu
 
 
 def login(request):  # 登录
@@ -206,3 +206,39 @@ def quit_plan(request):
         related.save()
 
         return redirect('/my/')
+
+
+# 以下是早餐预定功能的函数：
+
+# 进入早餐预定页面(学生端)
+def order_bf(request):
+    if request.method == 'GET':
+        # 登录了才能进入页面
+        if not request.user.is_authenticated:
+            return render(request, 'my.html', {'not_log_in': True})  # 未登录,跳转至个人主页去登录
+        else:
+            return render(request, 'order_bf.html')  # 已登录，跳转至早餐预定页面
+
+
+# 主页--按钮 进入主页 查看商家
+def home(request):
+        shop_list = Shop.objects.all() #获取所有商家数据
+        return render(request,'order_bf.html',{'shop_list',shop_list}) #将商家数据渲染到页面上
+
+# 我的--按钮
+def mine(request):
+    return render(request,'mine.html')
+
+# 选择商家后 显示菜单 并且 选择菜品支付
+def menu_show(request):
+        shop = request.GET.get('shop') #获取前端返回商家编号
+        if Shop.bus_hour.filter(shop =shop) > datetime.datetime.now(): #如果歇业时间大于当前时间
+            Menu_list = Menu.objects.filter(shop=shop and ) #获取该商家编号的菜单
+            return render(request,'order_bf_menu.html',{'menu',Menu_list}) #将菜单渲染到页面上
+        else: #否则提示商家已歇业
+            return
+
+
+# 选择菜品
+def food_chosen(request):
+    goods_id = request.GET.get('goods_id')
