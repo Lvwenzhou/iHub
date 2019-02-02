@@ -8,7 +8,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 
 # Create your views here.
-from iHub_site.models import Users, Plan, JoinPlan,Order,OrderFood,Shop,Menu
+from iHub_site.models import Users, Plan, JoinPlan, Order, OrderFood, Shop, Menu
 
 
 def login(request):  # 登录
@@ -54,7 +54,8 @@ def register(request):  # 注册
         credit = 100  # 默认100信誉积分
         # 还有头像……还不会做，先放着，以后再说
 
-        if len(name) == 0 or len(no) == 0 or len(username) == 0 or len(password) == 0 or len(password_again) == 0 or len(gender) == 0 or len(mail) == 0 or len(wechatid) == 0 or len(major) == 0:
+        if len(name) == 0 or len(no) == 0 or len(username) == 0 or len(password) == 0 or len(
+                password_again) == 0 or len(gender) == 0 or len(mail) == 0 or len(wechatid) == 0 or len(major) == 0:
             return render(request, 'register.html', {'not_full': True})  # 填写信息不够完整,重来
 
         # 不允许一个学号/工号多次注册
@@ -222,21 +223,24 @@ def order_bf(request):
 
 # 主页--按钮 进入主页 查看商家
 def home(request):
-        shop_list = Shop.objects.all() #获取所有商家数据
-        return render(request,'order_bf.html',{'shop_list',shop_list}) #将商家数据渲染到页面上
+    shop_list = Shop.objects.all()  # 获取所有商家数据
+    return render(request, 'order_bf.html', {'shop_list', shop_list})  # 将商家数据渲染到页面上
+
 
 # 我的--按钮
 def mine(request):
-    return render(request,'mine.html')
+    return render(request, 'mine.html')
+
 
 # 选择商家后 显示菜单 并且 选择菜品支付
 def menu_show(request):
-        shop = request.GET.get('shop') #获取前端返回商家编号
-        if Shop.bus_hour.filter(shop =shop) > datetime.datetime.now(): #如果歇业时间大于当前时间
-            Menu_list = Menu.objects.filter(shop=shop and ) #获取该商家编号的菜单
-            return render(request,'order_bf_menu.html',{'menu',Menu_list}) #将菜单渲染到页面上
-        else: #否则提示商家已歇业
-            return
+    shop_id = request.GET.get('shop')  # 获取前端返回商家编号
+    shop = Shop.objects.get(id=shop_id)
+    if not shop.closed:  # 如果歇业时间大于当前时间
+        Menu_list = Menu.objects.filter(shop=shop_id)  # 获取该商家编号的菜单
+        return render(request, 'order_bf_menu.html', {'menu', Menu_list})  # 将菜单渲染到页面上
+    else:  # 否则提示商家已歇业
+        return
 
 
 # 选择菜品
