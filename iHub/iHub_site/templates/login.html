@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" >
+{% load staticfiles %}
+<head>
+  <meta charset="UTF-8">
+  <title>Bootstrap Snippet: Login Form</title>
+  
+  
+  <link rel='stylesheet' href='http://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css'>
+
+  <link rel="stylesheet" href="{% static "css/style.css" %}">
+
+  
+</head>
+
+<body>
+<div class="container">
+  <div class="row clearfix">
+    <div class="col-md-12 column">
+      <div class="jumbotron">
+        <h1>
+          iHub校园服务平台
+        </h1>
+        <p>
+          服务校园 自主社区
+        </p>
+        <p>
+           <a class="btn btn-primary btn-large" href="#">了解更多</a>
+        </p>
+      </div>
+      <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="navbar-header">
+           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="#">iHub</a>
+        </div>
+        
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li class="active">
+               <a href="#">拼车</a>
+            </li>
+            <li>
+               <a href="#">早餐预订</a>
+            </li>
+            
+          </ul>
+          <form class="navbar-form navbar-left" role="search">
+            <div class="form-group"> 
+              <input type="text" placeholder="搜索..." class="form-control" />
+            </div> <button type="submit" class="btn btn-primary">提交</button>
+          </form>
+          <ul class="nav navbar-nav navbar-right">
+            <li>
+               <a href="#">注册</a>
+            </li>
+            
+          </ul>
+        </div>
+        
+      </nav>
+    </div>
+  </div>
+</div>
+
+    <div class="wrapper">
+    <form class="form-signin"  action="/login/" method="POST">
+      <h2 class="form-signin-heading">请先登陆</h2>
+      <input type="text" class="form-control" name="user_no_input" placeholder="学号/工号" required="" autofocus="" />
+      <input type="password" class="form-control" name="password_input" placeholder="密码" required=""/>
+      <label class="checkbox">
+        <input type="checkbox" value="remember-me" id="rememberMe" name="rememberMe"> 记住我
+      </label>
+      <button class="btn btn-lg btn-primary btn-block" type="submit">登陆</button>   
+    </form>
+  </div>
+  
+  
+
+</body>
+
+</html>

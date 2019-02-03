@@ -16,8 +16,8 @@ def login(request):  # 登录
         return render(request, 'login.html')  # 需要一个登录页面(前端加油哇)
 
     if request.method == 'POST':
-        user_no = request.POST.get('user_no')
-        password = request.POST.get('password')
+        user_no = request.POST.get('user_no_input')
+        password = request.POST.get('password_input')
         # 使用auth模块在数据库中查询信息，验证用户是否存在，以验证用户名和密码
         user = auth.authenticate(username=user_no, password=password)
         # 这里的username指的是User表中的学号，在Django的auth_user表中的username使用学号
