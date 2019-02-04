@@ -104,12 +104,12 @@ def start_plan(request):
         to_site = request.POST.get('to_site_input')  # 输入到达地点
         category = request.POST.get('category_input')  # 选择标签/分类
         trip_mode = request.POST.get('trip_mode_select')  # 选择出行方式
-        pub_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # 自动生成的发布时间
         deadline = request.POST.get('deadline_input')  # 输入截止时间
         trip_time = request.POST.get('trip_time_input')  # 输入计划出行时间
         note = request.POST.get('note_input')  # 输入备注
         num_need = request.POST.get('num_need_input')  # 输入除发起者外需要人数
-        auth_gender = request.POST.get('auth_gender_input')  # 选择允许加入者性别
+        auth_gender = request.POST.get('auth_gender_input')  # 选择允许加入者性别(男性、女性、两者)
+        pub_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # 自动生成的发布时间
 
         user_no_now = request.user.username
         user_now = Users.objects.get(no=user_no_now)
@@ -170,7 +170,7 @@ def take_part(request):
                 plan_to_join.full = True
                 plan_to_join.save()
 
-            return redirect('/my/')  # 参与成功，返回个人信息页面
+            return redirect('/my_plans/')  # 参与成功，返回个人信息页面
 
 
 # 取消已发起的拼车事件
@@ -186,7 +186,7 @@ def cancel_plan(request):
             item.canceled = True
             item.ended = True
             item.save()
-        return redirect('/my/')
+        return redirect('/my_plans/')
 
 
 # 退出已加入的拼车事件
@@ -206,7 +206,7 @@ def quit_plan(request):
         related.quitted = True
         related.save()
 
-        return redirect('/my/')
+        return redirect('/my_plans/')
 
 
 # 以下是早餐预定功能的函数：
@@ -228,8 +228,8 @@ def home(request):
 
 
 # 我的--按钮
-def mine(request):
-    return render(request, 'mine.html')
+def my_orders(request):
+    return render(request, 'my_orders.html')
 
 
 # 选择商家后 显示菜单 并且 选择菜品支付
@@ -246,3 +246,4 @@ def menu_show(request):
 # 选择菜品
 def food_chosen(request):
     goods_id = request.GET.get('goods_id')
+
