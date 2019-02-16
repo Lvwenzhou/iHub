@@ -20,4 +20,6 @@ import iHub_site.views as site_view
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', site_view.login),
+    path('my/', site_view.my),
+    path('register/', site_view.register),
 ]

@@ -11,6 +11,11 @@ from django.shortcuts import render, redirect
 from iHub_site.models import Users, Plan, JoinPlan, Order, OrderFood, Shop, Menu
 
 
+def my(request):
+    if request.method == 'GET':
+        return render(request, 'my.html')
+
+
 def login(request):  # 登录
     if request.method == 'GET':
         return render(request, 'login.html')  # 需要一个登录页面(前端加油哇)
@@ -50,6 +55,7 @@ def register(request):  # 注册
         wechatid = request.POST.get('wechatid_input')  # 微信ID,能够添加好友的方式
         reg_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # 自动生成的注册时间
         mail = request.POST.get('mail_input')  # 输入邮箱
+        # telnumber = request.POST.get('telnumber_input')  # 输入手机号
         major = request.POST.get('major_input')  # 输入专业
         credit = 100  # 默认100信誉积分
         # 还有头像……还不会做，先放着，以后再说
