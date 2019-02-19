@@ -5,7 +5,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>ihub Register</title>
+  <title>ihub-个人信息</title>
  
   <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">  
 	<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
@@ -22,61 +22,68 @@
         iHub
     </div>
 </div>
+
+{% if not_log_in %}
+<br>
+<button type="button" class="btn btn-primary btn-lg btn-block" onclick="location.href='/login/'">登录</button>
+<br>
+<button type="button" class="btn btn-primary btn-lg btn-block" onclick="location.href='/register/'">注册</button>
+{% endif %}
+
+{% if not not_log_in %}
 <div align="center"><img src="{% static "img/avatar/avatar_example.png" %}" class="img-circle" style="width: 20%;"></div>
 
 <div class="page-header" style="vertical-align: center;color: #10316B;">
-    <h1 style="text-align: center;">用户名
+    <h1 style="text-align: center;">{{ user.username }}
         <small>学生</small>
     </h1>
 </div>
-<p style="text-align: center;">个人简介xxx </p>
+<p style="text-align: center;">个人简介xxx</p>
 <br>
 <br>
 
- <div class="panel panel-default" style="height: 180px;vertical-align: center;">
-    <div class="panel-heading" style="height: 60px;padding-left: 120px;">
+ <div class="panel panel-default" style="vertical-align: center;">
+    <div class="panel-heading" style="padding-left: 120px;">
         <h4>基本信息</h4>
 
     </div>
-    <div class="panel-body" style="height: 120px;padding-left: 120px;">
-        <h5>性别</h5>
+    <div class="panel-body" style="padding-left: 120px;">
+        <h5>姓名:{{ user.name }}</h5>
         <br>
-        <h5>星座</h5>
+        <h5>性别:{{ user.gender }}</h5>
+        <br>
     </div>
 	</div>
 
 
-    <div class="panel panel-default" style="height: 300px;vertical-align: center;">
-    <div class="panel-heading" style="height: 60px;padding-left: 120px;">
+    <div class="panel panel-default" style="vertical-align: center;">
+    <div class="panel-heading" style="padding-left: 120px;">
         <h4>学校信息</h4>
-
     </div>
-    <div class="panel-body" style="height: 120px;padding-left: 120px;">
-        <h5>学校</h5>
+    <div class="panel-body" style="padding-left: 120px;">
+        <h5>专业: {{ user.major }}</h5>
         <br>
-        <h5>专业</h5>
-        <br>
-        <h5>班级</h5>
-        <br>
-        <h5>学号</h5>
-        <br>
+        <h5>学号/工号: {{ user.no }}</h5>
     </div>
-</div>
+    </div>
 
 
-<div class="panel panel-default" style="height: 180px;vertical-align: center;">
-    <div class="panel-heading" style="height: 60px;padding-left: 120px;">
+<div class="panel panel-default" style="vertical-align: center;">
+    <div class="panel-heading" style="padding-left: 120px;">
         <h4>个人信息</h4>
 
     </div>
-    <div class="panel-body" style="height: 120px;padding-left: 120px;">
-        <h5>邮箱</h5>
+    <div class="panel-body" style="padding-left: 120px;">
+        <h5>邮箱: {{ user.mail }}</h5>
         <br>
-        <h5>微信ID</h5>
+        <h5>微信ID: {{ user.weChat_id }}</h5>
     </div>
 	</div>
 
- <button type="button" class="btn btn-primary btn-lg btn-block" style="margin-bottom: 400px;">注销</button>
+ <button type="button" class="btn btn-primary btn-lg btn-block" onclick="location.href='/logout/'" style="margin-bottom: 400px;">注销</button>
+{% endif %}
+
+
 
  <nav class="navbar navbar-default navbar-fixed-bottom" role="navigation"> 
     <div class="container-fluid" style="vertical-align: bottom;">

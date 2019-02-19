@@ -13,7 +13,12 @@ from iHub_site.models import Users, Plan, JoinPlan, Order, OrderFood, Shop, Menu
 
 def my(request):
     if request.method == 'GET':
-        return render(request, 'my.html')
+        if request.user.is_authenticated:
+            user_no = request.user.username
+            user = Users.objects.get(no=user_no)
+            return render(request, 'my.html', {'user': user, 'not_log_in': False})
+        else:
+            return render(request, 'my.html', {'not_log_in': True})
 
 
 def login(request):  # 登录
@@ -31,7 +36,7 @@ def login(request):  # 登录
         # 用于以后在调用每个视图函数前，auth中间件会根据每次访问视图前请求所带的SEESION里面的ID，去数据库找用户对像，并将对象保存在request.user属性中
         # 中间件执行完后，再执行视图函数
         if user:
-            return redirect('/index/')  # 登录成功，返回至主页
+            return redirect('/my/')  # 登录成功，返回至主页
         else:
             return render(request, 'login.html', {'wrong': True})  # 密码或用户名错误，反正没登陆成功
         # 这段登录的代码我也是借鉴的。反正就是用auth模块实现的登录
@@ -90,12 +95,17 @@ def logout(request):  # 登出
     if request.method == 'GET':
         # 以下一句为Django的账户系统
         auth.logout(request)
-        response = HttpResponseRedirect('/index/')
+        response = HttpResponseRedirect('/my/')
         response.delete_cookie('ticket')
         return response
 
 
 # 以下是拼车相关功能的函数:
+# 拼车功能首页
+def carpool_index(request):
+    if request.method == 'GET':
+        return render(request, 'carpool_index.html')
+
 
 # 发起拼车
 def start_plan(request):
@@ -108,13 +118,13 @@ def start_plan(request):
     if request.method == 'POST':
         from_site = request.POST.get('from_site_input')  # 输入起始地点
         to_site = request.POST.get('to_site_input')  # 输入到达地点
-        category = request.POST.get('category_input')  # 选择标签/分类
+        category = request.POST.get('category_select')  # 选择标签/分类
         trip_mode = request.POST.get('trip_mode_select')  # 选择出行方式
         deadline = request.POST.get('deadline_input')  # 输入截止时间
         trip_time = request.POST.get('trip_time_input')  # 输入计划出行时间
         note = request.POST.get('note_input')  # 输入备注
         num_need = request.POST.get('num_need_input')  # 输入除发起者外需要人数
-        auth_gender = request.POST.get('auth_gender_input')  # 选择允许加入者性别(男性、女性、两者)
+        auth_gender = request.POST.get('auth_gender_select')  # 选择允许加入者性别(男性、女性、两者)
         pub_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # 自动生成的发布时间
 
         user_no_now = request.user.username
@@ -133,6 +143,13 @@ def start_plan(request):
                                 auth_gender=auth_gender, pub_username=pub_username, pub_name=pub_name, pub_no=pub_no,
                                 pub_wechat=pub_wechat, pub_gender=pub_gender)
             return HttpResponseRedirect('/plans/')  # 发起成功，返回查看拼车信息页面
+
+
+# 查看已有拼车
+def plans(request):
+    if request.method == 'GET':
+        plan_list = Plan.objects.filter(Q(ended=False) & Q(full=False))
+        return render(request, 'plans.html', {'plan_list': plan_list})
 
 
 # 加入拼车
@@ -177,6 +194,25 @@ def take_part(request):
                 plan_to_join.save()
 
             return redirect('/my_plans/')  # 参与成功，返回个人信息页面
+
+
+# 查看我的拼车信息
+def my_plans(request):
+    if request.method == 'GET':
+        if not request.user.is_authenticated:
+            return render(request, 'my_plans.html', {'not_logged_in': True})
+        user = request.user.username
+        my_start = Plan.objects.filter(pub_no=user)  # 我发起的拼车
+        my_join_tmp = JoinPlan.objects.filter(join_no=user)
+        my_join = []
+        for i in my_join_tmp:
+            if not i.canceled and not i.quitted:
+                join_id = i.join_plan_id
+                join_plan = Plan.objects.get(id=join_id)
+                my_join.append(join_plan)
+        join_list = JoinPlan.objects.all()
+        return render(request, 'my_plans.html', {'not_logged_in': False, 'join_list': join_list,
+                                                 'my_start': my_start, 'my_join': my_join})
 
 
 # 取消已发起的拼车事件

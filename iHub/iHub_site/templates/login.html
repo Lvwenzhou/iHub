@@ -4,14 +4,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Bootstrap Snippet: Login Form</title>
-  
-  
-  <link rel='stylesheet' href='http://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css'>
+  <title>!Hub-登录</title>
 
+  <link rel='stylesheet' href='http://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css'>
   <link rel="stylesheet" href="{% static "css/style.css" %}">
 
-  
 </head>
 
 <body>
@@ -64,6 +61,7 @@
 
     <div class="wrapper">
     <form class="form-signin"  action="/login/" method="POST">
+      {% csrf_token %}
       <h2 class="form-signin-heading">请先登陆</h2>
       <input type="text" class="form-control" name="user_no_input" placeholder="学号/工号" required="" autofocus="" />
       <input type="password" class="form-control" name="password_input" placeholder="密码" required=""/>
