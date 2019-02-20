@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1.0,user-scalable=0">
+  <title>ihub order</title>
+
+  <link rel='stylesheet' href='http://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css'>
+  <link rel="stylesheet" href="{% static "css/style.css" %}">
+  <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+  <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+  {% block linkscript %}
+  {% endblock linkscript %}
+
+
+</head>
+<body>
+<div class="container">
+  <div class="row clearfix">
+    <div class="col-md-12 column">
+      <div class="jumbotron">
+        <h1>
+          iHub 早餐预定
+        </h1>
+        <p>
+          服务校园 自主社区
+        </p>
+      </div>
+      <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="navbar-header">
+           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="#">iHub</a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li class="active">
+               <a href="/shop_home/">首页</a>
+            </li>
+            <li>
+               <a href="/shop_cart/">购物车</a>
+            </li>
+            <li>
+               <a href="/shop_my/">我的</a>
+            </li>
+
+          </ul>
+        </div>
+
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    {% block base %}
+    {% endblock base%}
+</body>
+
+</html>

@@ -83,9 +83,9 @@ DATABASES = {
         'PASSWORD': '!Hub2019',
         'HOST': 'rm-bp1b4qfjs27c5ld11wo.mysql.rds.aliyuncs.com',
         'PORT': '3306',
+        'OPTIONS': {},
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators

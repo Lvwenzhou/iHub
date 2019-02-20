@@ -44,6 +44,7 @@ class Shop(models.Model):  # 商家
     bus_hour = models.CharField(u"营业时间", max_length=100)  # 此处营业时间CharField。。让商家自己随便写吧。。
     note = models.CharField(u"商店说明", max_length=255)
     closed = models.BooleanField(u"当前是否未营业", default=False)  # 默认营业中，商家根据情况营业或歇业
+    img = models.ImageField(u"商家展示", upload_to='static/shop_img', default="", null=True)
 
 
 class OrderFood(models.Model):  # 订单、菜品、商家之间的关系表

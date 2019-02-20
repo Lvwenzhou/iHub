@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block base%}
+{% for shop in shop_list %}
+
+    <div class="row" style="margin-bottom: 10px">
+        <div class="col-xs-1">
+        </div>
+        <div class="col-xs-3">
+            <a href='/shop_home/{{shop.name}}'>
+                <img src="{{shop.img}}" height="70px" width="70px" >
+            </a>
+        </div>
+        <div class="col-xs-6">
+            <b><p style="color: #f9f9f9 ; font-size:17px" >{{shop.name}}</p></b>
+            <p style="color: #f9f9f9">营业时间：{{shop.bus_hour}}</p>
+            <p style="color: #f9f9f9">tel：{{shop.tel}}</p>
+        </div>
+    </div>
+{% endfor %}
+{% endblock base%}

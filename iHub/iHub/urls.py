@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, re_path
 import iHub_site.views as site_view
 
 urlpatterns = [
@@ -30,4 +30,9 @@ urlpatterns = [
     path('cancel_plan/', site_view.cancel_plan),
     path('quit_plan/', site_view.quit_plan),
     path('carpool_index/', site_view.carpool_index),
+
+    path('shop_home/', site_view.order_bf),
+    re_path(r'^shop_home/(\w+)/$', site_view.shop_menu),
+    path('shop_cart/', site_view.shop_cart),
+    path('shop_my/', site_view.shop_my),
 ]
