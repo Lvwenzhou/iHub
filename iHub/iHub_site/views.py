@@ -284,9 +284,10 @@ def shop_cart(request):
 # 选择商家后 显示菜单 并且 选择菜品支付
 def shop_menu(request, shop_name):
     shop = Shop.objects.get(name=shop_name)
+    shops = Shop.objects.filter(name=shop_name)
     if not shop.closed:  # 如果歇业时间大于当前时间
-        Menu_list = Menu.objects.filter(shop=shop.name)  # 获取该商家编号的菜单
-        return render(request, 'shop_menu.html', {'menu': Menu_list})  # 将菜单渲染到页面上
+        menu_list = Menu.objects.filter(shop=shop.name)  # 获取该商家编号的菜单
+        return render(request, 'shop_menu.html', {'menu': menu_list, 'shops': shops})  # 将菜单渲染到页面上
 
 
 # 选择菜品
